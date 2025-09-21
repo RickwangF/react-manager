@@ -1,4 +1,4 @@
-import {createBrowserRouter, Navigate} from "react-router-dom";
+import {createBrowserRouter, Navigate, useParams, Outlet} from "react-router-dom";
 import App from "./App.tsx";
 
 function React() {
@@ -30,6 +30,32 @@ function Apple() {
   )
 }
 
+function OrderDetail() {
+  const params = useParams()
+  return(
+    <h1>this is order detail page orderId is { params.orderId } </h1>
+  )
+}
+
+function Goods() {
+  const params = useParams()
+  return(
+    <h1>
+      this is goods page
+      <Outlet />
+    </h1>
+  )
+}
+
+function GoodsList() {
+  const params = useParams()
+  return (
+    <h2>
+      Goods List Page, page is { params.page }
+    </h2>
+  )
+}
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -54,7 +80,20 @@ const router = createBrowserRouter([
   {
     path: '*',
     element: <NotFound/>
-  }
-  ]);
+  },
+  {
+    path: '/order/:orderId',
+    element: <OrderDetail/>
+  },
+  {
+    path: '/goods',
+    element: <Goods/>,
+    children: [
+      {
+        path: 'list/:page',
+        element: <GoodsList/>
+      }
+    ]
+  }], {basename: '/app'});
 
 export default router
